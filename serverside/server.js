@@ -46,7 +46,7 @@ else if(path.pathname=='/js/index.js'){
     res.end(fs.readFileSync("../clientside/js/index.js"))
 }
  else if(path.pathname=="/submit"&&req.method=="POST"){
-    console.log("hai");
+    // console.log("hai");
     let body="";
     req.on("data",(chunks)=>{
         console.log(chunks);
@@ -70,7 +70,7 @@ else if(path.pathname=='/js/index.js'){
 }
 
 //get doner
-if(path.pathname=="/getdoner"&&req.method=="GET"){
+if(path.pathname=='/getdoner'&&req.method=='GET'){
     const data=await collection.find().toArray();
     const json_data=JSON.stringify(data)
     console.log(json_data);
@@ -84,8 +84,8 @@ else if(path.pathname=='/delete'&& req.method=='DELETE'){
     req.on('data',(chunks)=>{
         body+=chunks.toString()
         console.log(body);
-        
-    })
+     })
+
 req.on('end',async()=>{
     let_id=new ObjectId(body)
     console.log(_id);
@@ -95,10 +95,34 @@ req.on('end',async()=>{
     }).catch(()=>{
         res.writeHead(200,{"content-type":"text/plain"})
         res.end("failed")
+    })  
+})
+}
+
+else if(path.pathname=="/update"&& req.method=="PUT"){
+let body=""
+req.on('data',(chunks)=>{
+    body+=chunks.toString()
+})
+req.on('end',async()=>{
+    let data=JSON.parse(body)
+    console.log(data);
+    let _id=new ObjectId(data.id)
+    console.log(_id);
+    let updateData={name:data.name,email:data.email,phone:data.phone,blood:data.blood,gender:data.gender}
+    await collection.updateOne({_id},{$set:updateData}).then(()=>{
+        console.log("update successfully");
+        res.writeHead(200,{"content-type":"text/plain"})
+        res.end("success")
+        
+    }).catch((error)=>{
+        console.log(error);
+        res.writeHead(200,{"content-type":"text/plain"})
+        res.end("failed")
     })
     
 })
-
 }
+
 })
 app.listen(PORT)
