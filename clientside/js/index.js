@@ -1,5 +1,5 @@
 async function getdoner(params) {
-    const res=await fetch("http://localhost:4000/getdoner")
+    const res=await fetch("http://localhost:3000/getdoner")
    const data=await res.json()
    console.log(data);
    
@@ -27,7 +27,7 @@ async function getdoner(params) {
     
 }
 getdoner()
- function handleEdit(_id){
+ function handleEdit(id){
     document.getElementById(`name-${id}`).disabled=false
     document.getElementById(`email-${id}`).disabled=false
     document.getElementById(`phone-${id}`).disabled=false
@@ -35,10 +35,10 @@ getdoner()
     document.getElementById(`gender-${id}`).disabled=false
  }
 
-  async function handleDelete(_id) {
-    let res=await fetch('http://localhost:4000/delete',{
+  async function handleDelete(id) {
+    let res=await fetch('http://localhost:3000/Delete',{
        method:"DELETE",
-       headers:{"content:type":"text/plain"},
+       headers:{"Content:Type":"text/plain"},
        body:id        
     })
     if(res.status==200){
@@ -50,7 +50,7 @@ getdoner()
     }
   }
 
-  async function handleSave(_id) {
+  async function handleSave(id) {
     console.log(id);
     const name=document.getElementById(`name-${id}`).value
     const email=document.getElementById(`email-${id}`).value
@@ -59,14 +59,15 @@ getdoner()
     const gender=document.getElementById(`gender-${id}`).value
     console.log(name,email,phone,bloodgroup,gender);
     const data=(id,name,email,phone,bloodgroup,gender)
-    const res=await fetch("http://localhost:4000/update",{
+
+    const res=await fetch("http://localhost:3000/update",{
         method:"PUT",
-        headers:{"content-type":"text/json"},
+        headers:{"Content-Type":"text/json"},
         body:JSON.stringify(data)
 
     })
     console.log(res);
-    if(res.status===200)
+    if(res.status==200)
     {
         alert("success")
         getdoner()
